@@ -17,4 +17,6 @@ public class DataSource
         return instance;
     }
     public List<Book> _books = new List<Book>();
+    public List<Author> _authors = new List<Author>();
+    public List<Shop> _shops = new List<Shop>();
 }

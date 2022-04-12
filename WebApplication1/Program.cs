@@ -25,3 +25,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.Run();
 builder.Services.AddTransient<BookService>();
+builder.Services.AddTransient<AuthorService>();
+builder.Services.AddTransient<ShopService>();
