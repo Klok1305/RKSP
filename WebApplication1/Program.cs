@@ -8,7 +8,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
-
+builder.Services.AddTransient<BookService>();
+builder.Services.AddTransient<AuthorService>();
+builder.Services.AddTransient<ShopService>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -24,6 +26,3 @@ app.UseCors(policy => policy
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
-builder.Services.AddTransient<BookService>();
-builder.Services.AddTransient<AuthorService>();
-builder.Services.AddTransient<ShopService>();
