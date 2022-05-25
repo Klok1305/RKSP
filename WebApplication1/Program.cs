@@ -1,3 +1,4 @@
+using WebApplication1.Data;
 using WebApplication1.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,18 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddTransient<BookService>();
 builder.Services.AddTransient<AuthorService>();
 builder.Services.AddTransient<ShopService>();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<EducationContext>();
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddTransient<AffiliationService>();
+builder.Services.AddTransient<BookService>();
+builder.Services.AddTransient<AuthorService>();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -26,3 +39,5 @@ app.UseCors(policy => policy
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
+

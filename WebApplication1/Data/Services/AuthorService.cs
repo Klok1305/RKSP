@@ -1,47 +1,93 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using WebApplication1.Data.DTOs;
 using WebApplication1.Data.Models;
 
 namespace WebApplication1.Data.Services;
-
+    
 public class AuthorService
 {
-    public async Task<Author> AddBook(Author author)
+    public async Task<Author> AddAuthor1(Author author)
     {
         DataSource.GetInstance()._authors.Add(author);
         return await Task.FromResult(author);
     }
-    
+    private EducationContext _context;
+    public async Task<Author?> AddAuthor(AuthorDTO author)
+    {
+        Author nauthor = new Author
+        {
+            Name = author.Name,
+            Genre = author.Genre,
+            Age = author.Age
+        };
+        if (author.Affiliations.Any())
+        {
+            nauthor.Affiliations  = _context.Affiliations.ToList().IntersectBy(author.Affiliations, affiliation => affiliation.Id).ToList();
+        }
+        var result = _context.Authors.Add(nauthor);
+        await _context.SaveChangesAsync();
+        return await Task.FromResult(result.Entity);
+    }
+
     public async Task<Author> GetAuthor(int id)
     {
-        var result = DataSource.GetInstance()._authors.Find(a => a.Id == id);
-        return await Task.FromResult(result);
-    }
+        var result = _context.Authors.Include(a=>a.Affiliations).Include(b=>b.Books).FirstOrDefault(author => author.Id==id);
     
+        return await Task.FromResult(result);
+
+    }
+
+    public async Task<Author> GetAuthorsIncomplete()
+    {
+        var result = DataSource.GetInstance()._authors;
+        return result[1];
+    }
+
     public async Task<List<Author>> GetAuthors()
     {
-        return await Task.FromResult(DataSource.GetInstance()._authors);
+        var result = await _context.Authors.Include(a=>a.Affiliations).Include(b=>b.Books).ToListAsync();
+        return await Task.FromResult(result);
+
     }
     
-    public async Task<Author?> UpdateAuthor(int id, Author newBook) // !
+    public async Task<Author?> UpdateAuthor(int id, Author updatedAuthor) // !
     {
-        var auth = DataSource.GetInstance()._authors.FirstOrDefault(au => au.Id == newBook.Id);
-        if (auth != null)
+        var author = await _context.Authors.Include(author=>author.Affiliations).Include(b=>b.Books).FirstOrDefaultAsync(au => au.Id == id);
+        if (author != null)
         {
-            auth.Name = newBook.Name;
-            auth.Genre = newBook.Genre;
-            auth.Age = newBook.Age;
-            return auth;
+            author.Name = updatedAuthor.Name;
+            author.Age = updatedAuthor.Age;
+            author.Genre = updatedAuthor.Genre;
+            if (updatedAuthor.Affiliations.Any())
+            {
+                author.Affiliations  = _context.Affiliations.ToList().IntersectBy(updatedAuthor.Affiliations, affiliation => affiliation).ToList();
+            }
+            if (updatedAuthor.Books.Any())
+            {
+                author.Books  = _context.Books.ToList().IntersectBy(updatedAuthor.Books, article => article).ToList();
+            }
+            _context.Authors.Update(author);
+            _context.Entry(author).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return author;
         }
+
         return null;
+
     }
     public async Task<bool> DeleteAuthor(int id)
     {
-        var author =  DataSource.GetInstance()._authors.FirstOrDefault(a => a.Id == id);
+        var author = await _context.Authors.FirstOrDefaultAsync(au => au.Id == id);
         if (author != null)
         {
-            DataSource.GetInstance()._authors.Remove(author);
+            _context.Authors.Remove(author);
+            await _context.SaveChangesAsync();
             return true;
         }
+
         return false;
+
     }
 }

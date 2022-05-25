@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Data.DTOs;
 using WebApplication1.Data.Models;
 using WebApplication1.Data.Services;
 
@@ -43,9 +44,9 @@ public class AuthorController: ControllerBase
         return Ok(result);
     }
     [HttpPost]
-    public async Task<ActionResult<Author>> PostBook([FromBody]Author author)
+    public async Task<ActionResult<Author>> PostBook([FromBody]AuthorDTO author)
     {
-        var result = await _context.AddBook(author);
+        var result = await _context.AddAuthor(author);
         if (result == null)
         {
             BadRequest();
@@ -63,5 +64,7 @@ public class AuthorController: ControllerBase
         }
         return BadRequest();
     }
+    
+    
 
 }
