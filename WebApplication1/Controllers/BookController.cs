@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Data.DTOs;
 using WebApplication1.Data.Models;
 using WebApplication1.Data.Services;
 
@@ -42,7 +43,7 @@ public class BookController: ControllerBase
         return Ok(result);
     }
     [HttpPost]
-    public async Task<ActionResult<Book>> PostBook([FromBody]Book book)
+    public async Task<ActionResult<Book>> PostBook([FromBody]BookDTO book)
     {
         var result = await _context.AddBook(book);
         if (result == null)

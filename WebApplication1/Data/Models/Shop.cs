@@ -10,6 +10,7 @@ public class Shop
     [Column(Order = 1)]
     public int Id { get; set; }
     public string Name { get; set; }
-    public int cost2display { get; set; }
-    public IEnumerable<Author> Authors { get; set; }
+    public string Location { get; set; }
+    public IEnumerable<Book> Books { get; set; }
+    public IEnumerable<Order> Orders { get; set; }
 }

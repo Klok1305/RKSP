@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Data.DTOs;
 using WebApplication1.Data.Models;
 using WebApplication1.Data.Services;
 
@@ -42,9 +43,9 @@ public class ShopController: ControllerBase
         return Ok(result);
     }
     [HttpPost]
-    public async Task<ActionResult<Book>> PostBook([FromBody]Shop shop)
+    public async Task<ActionResult<Book>> PostBook([FromBody]ShopDTO shop)
     {
-        var result = await _context.AddBook(shop);
+        var result = await _context.AddShop(shop);
         if (result == null)
         {
             BadRequest();

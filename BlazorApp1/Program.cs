@@ -1,31 +1,17 @@
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using BlazorApp1.Data;
-using BlazorApp1.Data.Services;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using BlazorApp1;
+using BlazorApp1.Services;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped<IAuthorProvider, AuthorsProvider>();
-var app = builder.Build();
+builder.Services.AddScoped<IBookProvider, BooksProvider>();
+builder.Services.AddScoped<IOrderProvider, OrdersProvider>();
+builder.Services.AddScoped<IShopProvider, ShopsProvider>();
+builder.Services.AddScoped<IUserProvider, UsersProvider>();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-app.UseHttpsRedirection();
-
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
-
-app.Run();
+await builder.Build().RunAsync();

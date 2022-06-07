@@ -1,4 +1,4 @@
-/* _content/BlazorApp1/Pages/Author.razor.rz.scp.css */
+/* /Pages/Author.razor.rz.scp.css */
 .field[b-h5asmhcfaf] {
     display: flex;
     flex-direction: row;
@@ -25,7 +25,34 @@
     border-radius: 8px;
     background-color: #ff00ff44;
 }
-/* _content/BlazorApp1/Shared/MainLayout.razor.rz.scp.css */
+/* /Pages/Ordering.razor.rz.scp.css */
+.field[b-21qz5zkmzx] {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+}
+.authorBlock[b-21qz5zkmzx] {
+    display: flex;
+    flex-direction: column;
+}
+.label[b-21qz5zkmzx] {
+    width: 200px;
+}
+.valueField[b-21qz5zkmzx] {
+    width: 400px;
+}
+.artAuthors[b-21qz5zkmzx] {
+    display: flex;
+    flex-direction: column;
+}
+.authorTag[b-21qz5zkmzx] {
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #8b008bff;
+    border-radius: 8px;
+    background-color: #ff00ff44;
+}
+/* /Shared/MainLayout.razor.rz.scp.css */
 .page[b-45rkf8v3vv] {
     position: relative;
     display: flex;
@@ -49,12 +76,17 @@ main[b-45rkf8v3vv] {
     align-items: center;
 }
 
-    .top-row[b-45rkf8v3vv]  a, .top-row .btn-link[b-45rkf8v3vv] {
+    .top-row[b-45rkf8v3vv]  a, .top-row[b-45rkf8v3vv]  .btn-link {
         white-space: nowrap;
         margin-left: 1.5rem;
+        text-decoration: none;
     }
 
-    .top-row a:first-child[b-45rkf8v3vv] {
+    .top-row[b-45rkf8v3vv]  a:hover, .top-row[b-45rkf8v3vv]  .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    .top-row[b-45rkf8v3vv]  a:first-child {
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -68,7 +100,7 @@ main[b-45rkf8v3vv] {
         justify-content: space-between;
     }
 
-    .top-row a[b-45rkf8v3vv], .top-row .btn-link[b-45rkf8v3vv] {
+    .top-row[b-45rkf8v3vv]  a, .top-row[b-45rkf8v3vv]  .btn-link {
         margin-left: 0;
     }
 }
@@ -91,12 +123,18 @@ main[b-45rkf8v3vv] {
         z-index: 1;
     }
 
+    .top-row.auth[b-45rkf8v3vv]  a:first-child {
+        flex: 1;
+        text-align: right;
+        width: 0;
+    }
+
     .top-row[b-45rkf8v3vv], article[b-45rkf8v3vv] {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
 }
-/* _content/BlazorApp1/Shared/NavMenu.razor.rz.scp.css */
+/* /Shared/NavMenu.razor.rz.scp.css */
 .navbar-toggler[b-b5wscdn8ts] {
     background-color: rgba(255, 255, 255, 0.1);
 }

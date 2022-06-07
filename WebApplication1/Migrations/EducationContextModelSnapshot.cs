@@ -40,23 +40,80 @@ namespace WebApplication1.Migrations
                     b.ToTable("author_book", (string)null);
                 });
 
-            modelBuilder.Entity("AuthorShop", b =>
+            modelBuilder.Entity("BookOrder", b =>
                 {
-                    b.Property<int>("AuthorsId")
+                    b.Property<int>("BooksId")
                         .HasColumnType("integer")
-                        .HasColumnName("authors_id");
+                        .HasColumnName("books_id");
+
+                    b.Property<int>("OrdersId")
+                        .HasColumnType("integer")
+                        .HasColumnName("orders_id");
+
+                    b.HasKey("BooksId", "OrdersId")
+                        .HasName("pk_book_order");
+
+                    b.HasIndex("OrdersId")
+                        .HasDatabaseName("ix_book_order_orders_id");
+
+                    b.ToTable("book_order", (string)null);
+                });
+
+            modelBuilder.Entity("BookShop", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("integer")
+                        .HasColumnName("books_id");
 
                     b.Property<int>("ShopsId")
                         .HasColumnType("integer")
                         .HasColumnName("shops_id");
 
-                    b.HasKey("AuthorsId", "ShopsId")
-                        .HasName("pk_author_shop");
+                    b.HasKey("BooksId", "ShopsId")
+                        .HasName("pk_book_shop");
 
                     b.HasIndex("ShopsId")
-                        .HasDatabaseName("ix_author_shop_shops_id");
+                        .HasDatabaseName("ix_book_shop_shops_id");
 
-                    b.ToTable("author_shop", (string)null);
+                    b.ToTable("book_shop", (string)null);
+                });
+
+            modelBuilder.Entity("OrderShop", b =>
+                {
+                    b.Property<int>("OrdersId")
+                        .HasColumnType("integer")
+                        .HasColumnName("orders_id");
+
+                    b.Property<int>("ShopsId")
+                        .HasColumnType("integer")
+                        .HasColumnName("shops_id");
+
+                    b.HasKey("OrdersId", "ShopsId")
+                        .HasName("pk_order_shop");
+
+                    b.HasIndex("ShopsId")
+                        .HasDatabaseName("ix_order_shop_shops_id");
+
+                    b.ToTable("order_shop", (string)null);
+                });
+
+            modelBuilder.Entity("OrderUser", b =>
+                {
+                    b.Property<int>("OrdersId")
+                        .HasColumnType("integer")
+                        .HasColumnName("orders_id");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer")
+                        .HasColumnName("users_id");
+
+                    b.HasKey("OrdersId", "UsersId")
+                        .HasName("pk_order_user");
+
+                    b.HasIndex("UsersId")
+                        .HasDatabaseName("ix_order_user_users_id");
+
+                    b.ToTable("order_user", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication1.Data.Models.Author", b =>
@@ -72,11 +129,6 @@ namespace WebApplication1.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("integer")
                         .HasColumnName("age");
-
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("genre");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -99,10 +151,10 @@ namespace WebApplication1.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Author")
+                    b.Property<string>("Genre")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("author");
+                        .HasColumnName("genre");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -119,7 +171,58 @@ namespace WebApplication1.Migrations
                     b.ToTable("books", (string)null);
                 });
 
+            modelBuilder.Entity("WebApplication1.Data.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id")
+                        .HasColumnOrder(1);
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("cost")
+                        .HasColumnType("integer")
+                        .HasColumnName("cost");
+
+                    b.Property<string>("goods")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("goods");
+
+                    b.HasKey("Id")
+                        .HasName("pk_orders");
+
+                    b.ToTable("orders", (string)null);
+                });
+
             modelBuilder.Entity("WebApplication1.Data.Models.Shop", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id")
+                        .HasColumnOrder(1);
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("location");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_shops");
+
+                    b.ToTable("shops", (string)null);
+                });
+
+            modelBuilder.Entity("WebApplication1.Data.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,14 +237,10 @@ namespace WebApplication1.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("cost2display")
-                        .HasColumnType("integer")
-                        .HasColumnName("cost2display");
-
                     b.HasKey("Id")
-                        .HasName("pk_shops");
+                        .HasName("pk_users");
 
-                    b.ToTable("shops", (string)null);
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("AuthorBook", b =>
@@ -161,21 +260,72 @@ namespace WebApplication1.Migrations
                         .HasConstraintName("fk_author_book_books_books_id");
                 });
 
-            modelBuilder.Entity("AuthorShop", b =>
+            modelBuilder.Entity("BookOrder", b =>
                 {
-                    b.HasOne("WebApplication1.Data.Models.Author", null)
+                    b.HasOne("WebApplication1.Data.Models.Book", null)
                         .WithMany()
-                        .HasForeignKey("AuthorsId")
+                        .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_author_shop_authors_authors_id");
+                        .HasConstraintName("fk_book_order_books_books_id");
+
+                    b.HasOne("WebApplication1.Data.Models.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_book_order_orders_orders_id");
+                });
+
+            modelBuilder.Entity("BookShop", b =>
+                {
+                    b.HasOne("WebApplication1.Data.Models.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_book_shop_books_books_id");
 
                     b.HasOne("WebApplication1.Data.Models.Shop", null)
                         .WithMany()
                         .HasForeignKey("ShopsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_author_shop_shops_shops_id");
+                        .HasConstraintName("fk_book_shop_shops_shops_id");
+                });
+
+            modelBuilder.Entity("OrderShop", b =>
+                {
+                    b.HasOne("WebApplication1.Data.Models.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_shop_orders_orders_id");
+
+                    b.HasOne("WebApplication1.Data.Models.Shop", null)
+                        .WithMany()
+                        .HasForeignKey("ShopsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_shop_shops_shops_id");
+                });
+
+            modelBuilder.Entity("OrderUser", b =>
+                {
+                    b.HasOne("WebApplication1.Data.Models.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_user_orders_orders_id");
+
+                    b.HasOne("WebApplication1.Data.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_order_user_users_users_id");
                 });
 #pragma warning restore 612, 618
         }

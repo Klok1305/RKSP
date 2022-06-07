@@ -19,4 +19,6 @@ public class DataSource
     public List<Book> _books = new List<Book>();
     public List<Author> _authors = new List<Author>();
     public List<Shop> _shops = new List<Shop>();
+    public List<Order> _orders = new List<Order>();
+    public List<User> _users = new List<User>();
 }

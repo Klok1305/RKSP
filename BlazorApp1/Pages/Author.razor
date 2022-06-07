@@ -1,12 +1,13 @@
 ﻿@page "/Author/{AuthorId}"
-@using BlazorApp1.Data.Services
+@using BlazorApp1.Services
 @code {
     [Parameter]
     public string AuthorId { get; set; }
-    public List<Data.Models.Author> Authors { get; set; }
-    public Data.Models.Author? CurrentAuthor { get; set; }
+    public List<global::Author> Authors { get; set; }
+    public global::Author CurrentAuthor { get; set; }
     [Inject]
     private IAuthorProvider authorsProvider { get; set; }
+    
     protected async override Task OnInitializedAsync()
     {
         CurrentAuthor = await authorsProvider.GetOne(Int32.Parse(AuthorId));
@@ -27,27 +28,26 @@
             <label class="label">ФИО</label> <input class="form-control valueField" type="text" value="@CurrentAuthor.Name" aria-label="Disabled input example" disabled readonly>
         </div>
         <div class="field">
-            <label class="label">Звание</label> <input class="form-control valueField" type="text" value="@CurrentAuthor.Genre" aria-label="Disabled input example" disabled readonly>
+            <label class="label">Возраст</label> <input class="form-control valueField" type="text" value="@CurrentAuthor.Age" aria-label="Disabled input example" disabled readonly>
         </div>
         <div class="field">
-            <label class="label">Должность</label> <input class="form-control valueField" type="text" value="@CurrentAuthor.Age" aria-label="Disabled input example" disabled readonly>
+            <label class="label">Книги</label> <input class="form-control valueField" type="text" value="@CurrentAuthor.Books" aria-label="Disabled input example" disabled readonly>
         </div>
     </div>
     <h3>Статьи</h3>
     <table class="table">
         <thead>
-        <th >Заголовок</th>
-        <th >Ключевые слова</th>
-        <th >Аннотация</th>
-        <th>Авторы</th>
+        <th >Название</th>
+        <th >Жанр</th>
+        <th >Цена</th>
         </thead>
         <tbody>
         @foreach (var art in CurrentAuthor.Books)
         {
             <tr >
-                <td>@art.Author</td>
-                <td>@art.Price</td>
                 <td>@art.Name</td>
+                <td>@art.Genre</td>
+                <td>@art.Price</td>
                 <td>
                     <div class="artAuthors">
                         @foreach (var artAuthor in Authors)
@@ -59,24 +59,6 @@
                         }
                     </div >
                 </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-    <h3>Магазин</h3>
-    <table class="table">
-        <thead>
-        <th >Название</th>
-        <th >Адрес</th>
-        <th >Направление деятельности</th>
-        </thead>
-        <tbody>
-        @foreach (var aff in CurrentAuthor.Shops)
-        {
-            <tr >
-                <td>@aff.Name</td>
-                <td>@aff.cost2display</td>
-                <td>@aff.Authors</td>
             </tr>
         }
         </tbody>
