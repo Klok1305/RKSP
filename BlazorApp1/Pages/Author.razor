@@ -21,6 +21,9 @@
 @if (CurrentAuthor != null)
 {
     <div class="authorBlock">
+    <div class="field">
+                <label class="label"></label> <input class="form-control valueField" type="text" value="@CurrentAuthor.Id" aria-label="Disabled input example" disabled readonly>
+            </div>
         <div class="field">
             <label class="label">Идентификатор</label> <input class="form-control valueField" type="text" value="@CurrentAuthor.Id" aria-label="Disabled input example" disabled readonly>
         </div>
